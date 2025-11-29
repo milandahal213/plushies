@@ -50,6 +50,6 @@ class Lights():
 
     def show_number(self, number, color = None, intensity = None):
         color, intensity = self.defaults(color, intensity)
-        for i in range(number):
-            self.on(i, color,intensity)   
-    
+        for i in range(NUM_LED):
+            self.np[i] = [int(c*intensity) for c in color] if (i == number) else OFF
+        self.np.write()

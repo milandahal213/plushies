@@ -13,7 +13,7 @@ NOTES = {
     'C5': 523,
 }
 
-class Play:
+class Notes:
     def __init__(self):
         self.running = True
         self.button = Button()
@@ -43,12 +43,13 @@ class Play:
             self.buzzer.close()
             print(f"[Task {task_id}] shutting down")
 
-# Usage example:
-async def main():
-    play = Play()
+
+async def main(obj):
+    play = Notes()
     task = asyncio.create_task(play.run())
-    await asyncio.sleep(20)
+    while obj.running:
+        print('@',end='')
+        await asyncio.sleep(1)
+    print('ending notes game')
     play.running = False
     await task
-
-asyncio.run(main())
