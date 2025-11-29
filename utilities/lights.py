@@ -43,7 +43,3 @@ class Lights():
         for i in range(number):
             self.on(i, color,intensity)   
     
-async def main():
-    a = Lights()
-    await a.animate()
-    
