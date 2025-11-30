@@ -59,8 +59,9 @@ def wifi_test():
 # https://chrisrogers.pyscriptapps.com/nick-esp-now/latest/
 
 def now_test():
-
-        n.publish(msg, mac)
+    def my_callback(msg, mac, rssi):
+        print(msg, mac, rssi)
+        n.publish(msg)
 
     n = espnow.Now(my_callback)
     n.connect()
