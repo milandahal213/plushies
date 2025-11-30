@@ -1,9 +1,9 @@
-from machine import Pin, PWM
-import time
 import random
 import asyncio
 
 from utilities.utilities import Button,Buzzer
+import utilities.lights as lights
+from games.game import Game
 
 # Frequencies for all 12 notes (in Hz)
 NOTES = {
@@ -13,43 +13,28 @@ NOTES = {
     'C5': 523,
 }
 
-class Notes:
+class Notes(Game):
     def __init__(self):
-        self.running = True
+        super().__init__('Notes Game')
         self.button = Button()
         self.buzzer = Buzzer()
-    
-    async def run(self):
+        self.note = random.choice(list(NOTES.keys()))
+        self.frequency = NOTES[self.note]
+        print(f"You were assigned {self.note} at a frequency of {self.frequency}")
+
+    async def loop(self):
         """
         Async task to play a random note while button is pressed.
         Stops when self.running is set to False.
         """
-        task_id = id(asyncio.current_task())
-        
-        # Pick a random note
-        note = random.choice(list(NOTES.keys()))
-        frequency = NOTES[note]
-        
-        print(f"[Task {task_id}] you were assigned {note} at a frequency of {frequency}")
-        
-        try:
-            while self.running:
-                if self.button.pressed:  # Button pressed
-                    self.buzzer.play(frequency)
-                else:  # Button released
-                    self.buzzer.stop()  # Silence                
-                await asyncio.sleep(0.01)
-        finally:
-            self.buzzer.close()
-            print(f"[Task {task_id}] shutting down")
+        if self.button.pressed:  # Button pressed
+            self.buzzer.play(self.frequency)
+            self.lights.all_on(lights.GREEN, 0.1)
+        else:  # Button released
+            self.buzzer.stop()  # Silence
+            self.lights.all_off()
 
+    def close(self):
+        self.lights.all_off() 
+        self.buzzer.close()
 
-async def main(obj):
-    play = Notes()
-    task = asyncio.create_task(play.run())
-    while obj.running:
-        print('@',end='')
-        await asyncio.sleep(1)
-    print('ending notes game')
-    play.running = False
-    await task

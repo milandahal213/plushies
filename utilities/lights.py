@@ -27,13 +27,20 @@ class Lights():
         if num < NUM_LED:
             self.np[num] = [int(c*intensity) for c in color]
             self.np.write()
-
+            
+    def all_on(self, color = None, intensity = None):
+        color, intensity = self.defaults(color, intensity)
+        for i in range(NUM_LED):
+            self.np[i] = [int(c*intensity) for c in color]
+        self.np.write()
+        
     def off(self, num):
         self.on(num, [0,0,0])
         
     def all_off(self, num = NUM_LED):
         for i in range(NUM_LED):
-            self.off(i)
+            self.np[i] = OFF
+        self.np.write()
         
     async def animate(self, color = None, intensity = None, number = NUM_LED, repeat= 1, timeout = 1.0, speed = 0.1):
         color, intensity = self.defaults(color, intensity)
