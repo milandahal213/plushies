@@ -1,5 +1,5 @@
 import time, json
-import espnow
+import now 
 from machine import SoftI2C, Pin
 import ssd1306
 
@@ -26,7 +26,7 @@ class Controller:
             print(mac, msg, rssi)
             self.n.publish(msg, mac)
 
-        self.n = espnow.Now(my_callback)
+        self.n = now.Now(my_callback)
         self.n.connect()
         print(self.n.wifi.config('mac'))
         
