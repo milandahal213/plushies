@@ -9,8 +9,10 @@ import utilities.now as now
 import games.test1 as test1
 import games.test2 as test2
 import games.test3 as test3
+from games.shake import shake
+from games.jump import jump
 
-game_names = [test1, test2, test3]
+game_names = [shake, jump, test3]
 
 class Stuffie:
     def __init__(self):
