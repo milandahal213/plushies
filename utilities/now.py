@@ -10,9 +10,9 @@ class Now():
         self.callback = callback if callback else self.default
         self.peers = []
     
-    def default(self, msg, mac):
+    def default(self, msg, mac, rssi):
         mac_str = ':'.join(f'{b:02x}' for b in mac)
-        print(msg.decode(),mac_str)
+        print(msg.decode(),' - ',mac_str, 'rssi = ',rssi)
         
     def antenna(self):
         ##Changing from internal to external antenna

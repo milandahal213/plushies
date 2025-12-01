@@ -91,7 +91,7 @@ class Button:
 fred = Controller()
 fred.display.row = 1
 fred.display.box_row(fred.display.row)
-#fred.connect()
+fred.connect()
 
 while True:
     if fred.button.state == 1:
