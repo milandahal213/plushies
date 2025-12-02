@@ -9,12 +9,12 @@ class Controller:
     def __init__(self):
         self.display = Display()
         self.display.clear_screen()
-        self.display.add_text('1: Hot-Cold')
-        self.display.add_text('2: Music')
-        self.display.add_text('3: Shake')
+        self.display.add_text('1: Music')
+        self.display.add_text('2: Shake')
+        self.display.add_text('3: Hot Cold')
         self.display.add_text('4: Jump')
         self.display.add_text('5: Clap')
-        self.display.add_text('6: no idea')
+        self.display.add_text('6: Rainbow')
         
         self.display.last_row = None
         self.row = 1
@@ -28,13 +28,20 @@ class Controller:
 
         self.n = now.Now(my_callback)
         self.n.connect()
-        print(self.n.wifi.config('mac'))
+        self.mac = self.n.wifi.config('mac')
+        print(self.mac)
         
     def shutdown(self):
         stop = json.dumps({'topic':'/game', 'value':-1})
         self.n.publish(stop)
         
+    def ping(self):
+        ping = json.dumps({'topic':'/ping', 'value':1})
+        self.n.publish(ping)
+        
     def choose(self, game):
+        mac = json.dumps({'topic':'/gem', 'value':self.mac})
+        self.n.publish(mac)
         setup = json.dumps({'topic':'/game', 'value':game})
         self.n.publish(setup)
 
@@ -94,6 +101,9 @@ fred.display.box_row(fred.display.row)
 fred.connect()
 
 while True:
+    time.sleep(0.5)
+    fred.ping()
+    
     if fred.button.state == 1:
         fred.display.row += ROW
         if fred.display.row > 60: fred.display.row = 1
@@ -103,9 +113,10 @@ while True:
         
     if fred.button.state == 2:
         fred.button.state = 0
-        select = 1 + int((fred.display.row)/10)
+        select = int((fred.display.row)/10)
         print('select ', select)
         fred.choose(select)
         
         
         
+
